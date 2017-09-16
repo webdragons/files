@@ -18,5 +18,11 @@
     "psr-4": {
       "bulldozer\\files\\": "src"
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }
