@@ -119,12 +119,12 @@ class File extends ActiveRecord
         FileHelper::createDirectory(App::getAlias("@uploads") . $out_dir);
 
         if ($file->saveAs(App::getAlias("@uploads") . $out_dir . $out_file_name)) {
-            $this->file_path = $out_dir . $out_file_name;
+            $this->file_path = '/uploads' . $out_dir . $out_file_name;
 
             if ($this->type == FileTypesEnum::TYPE_IMAGE) {
                 copy(App::getAlias("@uploads") . $out_dir . $out_file_name,
                     App::getAlias("@uploads") . $out_dir . $out_original_file_name);
-                $this->origin_file_path = $out_dir . $out_original_file_name;
+                $this->origin_file_path = '/uploads' . $out_dir . $out_original_file_name;
             } else {
                 $this->origin_file_path = $this->file_path;
             }
