@@ -3,6 +3,7 @@
 namespace bulldozer\files\models;
 
 use bulldozer\App;
+use bulldozer\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%resized_images}}".
@@ -13,12 +14,12 @@ use bulldozer\App;
  * @property integer $height
  * @property string $file_path
  */
-class ResizedImage extends \yii\db\ActiveRecord
+class ResizedImage extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%resized_images}}';
     }
@@ -26,40 +27,14 @@ class ResizedImage extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            [['image_id'], 'required'],
-            [['image_id', 'width', 'height'], 'integer'],
-            [['file_path'], 'string', 'max' => 700],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function afterDelete()
+    public function afterDelete(): void
     {
         parent::afterDelete();
 
-        $file_name = App::getAlias('@frontend') . '/web' . $this->file_path;
+        $file_name = App::getAlias('@uploads' . $this->file_path);
 
         if (file_exists($file_name) && !is_dir($file_name)) {
             unlink($file_name);
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'image_id' => 'Image ID',
-            'width' => 'Width',
-            'height' => 'Height',
-            'file_path' => 'File Path',
-        ];
     }
 }

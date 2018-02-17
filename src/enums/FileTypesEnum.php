@@ -1,8 +1,13 @@
 <?php
+
 namespace bulldozer\files\enums;
 
 use yii2mod\enum\helpers\BaseEnum;
 
+/**
+ * Class FileTypesEnum
+ * @package bulldozer\files\enums
+ */
 class FileTypesEnum extends BaseEnum
 {
     const TYPE_IMAGE       = 1;

@@ -2,41 +2,21 @@
 
 namespace bulldozer\files\models;
 
+use bulldozer\db\ActiveRecord;
+
 /**
  * This is the model class for table "{{%watermarks}}".
  *
  * @property integer $id
  * @property integer $image_id
  */
-class Watermark extends \yii\db\ActiveRecord
+class Watermark extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%watermarks}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['image_id'], 'required'],
-            [['image_id'], 'integer'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'image_id' => 'Image ID',
-        ];
     }
 }
