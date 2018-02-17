@@ -1,5 +1,7 @@
 <?php
 
+namespace bulldozer\files\migrations;
+
 use yii\db\Migration;
 
 /**
