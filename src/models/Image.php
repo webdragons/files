@@ -42,7 +42,7 @@ class Image extends File
 
             if (!file_exists(App::getAlias('@uploads/' . $file_info['dirname'] . '/' . $new_file_name))) {
                 $imanee = new Imanee(
-                    App::getAlias('@uploads' . ($useOrigin ? $this->origin_file_path : $this->file_path)),
+                    App::getAlias('@uploads/' . ($useOrigin ? $this->origin_file_path : $this->file_path)),
                     new ImagickResource()
                 );
                 $imanee->thumbnail($width, $height, $crop)
