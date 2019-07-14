@@ -36,13 +36,16 @@ class Image extends File
      */
     public function getThumbnail(int $width, int $height, bool $crop = false, bool $useOrigin = true): string
     {
+        $uploadsDirParts = explode('/', App::getAlias('@uploads'));
+        $uploadsDir = end($uploadsDirParts);
+
         try {
             $file_info = pathinfo($this->file_path);
             $new_file_name = $file_info['filename'] . '-' . $width . 'x' . $height . '.' . $file_info['extension'];
 
             if (!file_exists(App::getAlias('@uploads/' . $file_info['dirname'] . '/' . $new_file_name))) {
                 $imanee = new Imanee(
-                    App::getAlias('@uploads/' . ($useOrigin ? $this->origin_file_path : $this->file_path)),
+                    App::getAlias('@uploads' . ($useOrigin ? $this->origin_file_path : $this->file_path)),
                     new ImagickResource()
                 );
                 $imanee->thumbnail($width, $height, $crop)
@@ -59,14 +62,11 @@ class Image extends File
                 $resizedImage->save();
             }
 
-            $uploadsDirParts = explode('/', App::getAlias('@uploads'));
-            $uploadsDir = end($uploadsDirParts);
-
             return '/' . $uploadsDir . '/' . $file_info['dirname'] . '/' . $new_file_name;
         } catch (ImageNotFoundException $e) {
             App::error($e->getMessage(), 'images');
 
-            return $this->file_path;
+            return '/' . $uploadsDir . '/' . $this->file_path;
         }
     }
 
