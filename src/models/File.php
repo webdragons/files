@@ -33,7 +33,7 @@ class File extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function behaviors() : array
+    public function behaviors(): array
     {
         return [
             [
@@ -54,7 +54,7 @@ class File extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName() : string
+    public static function tableName(): string
     {
         return '{{%files}}';
     }
@@ -78,7 +78,7 @@ class File extends ActiveRecord
     /**
      * @return string
      */
-    public function getFullUrl() : string
+    public function getFullUrl(): string
     {
         $url = urlencode($this->getWebFilePath());
         $url = str_replace('%2F', '/', $url);
@@ -92,28 +92,28 @@ class File extends ActiveRecord
      * @return bool
      * @throws \yii\base\Exception
      */
-    public function upload(UploadedFile $file) : bool
+    public function upload(UploadedFile $file): bool
     {
         if (strpos($file->type, "image") !== false) {
             $this->type = FileTypesEnum::TYPE_IMAGE;
-            $out_dir = '/images/'.substr(md5(time()), 0, 2).'/'.substr(md5(time()+1), 0, 2).'/';
+            $outDir = '/images/' . substr(md5(time()), 0, 2) . '/' . substr(md5(time() + 1), 0, 2) . '/';
         } else {
             $this->type = FileTypesEnum::TYPE_OTHER;
-            $out_dir = '/files/'.substr(md5(time()), 0, 2).'/'.substr(md5(time()+1), 0, 2).'/';
+            $outDir = '/files/' . substr(md5(time()), 0, 2) . '/' . substr(md5(time() + 1), 0, 2) . '/';
         }
 
-        $out_file_name = Inflector::slug($file->baseName) . '.' . $file->extension;
-        $out_original_file_name = substr(md5(time()), 0, 5) . '-' . md5(time() + 1) . '.' . $file->extension;
+        $outFileName = Inflector::slug($file->baseName) . '.' . $file->extension;
+        $outOriginalFileName = substr(md5(rand()), 0, 5) . '-' . md5(rand()) . '.' . $file->extension;
 
-        FileHelper::createDirectory(App::getAlias("@uploads") . $out_dir);
+        FileHelper::createDirectory(App::getAlias("@uploads") . $outDir);
 
-        if ($file->saveAs(App::getAlias("@uploads") . $out_dir . $out_file_name)) {
-            $this->file_path = $out_dir . $out_file_name;
+        if ($file->saveAs(App::getAlias("@uploads") . $outDir . $outFileName)) {
+            $this->file_path = $outDir . $outFileName;
 
             if ($this->type == FileTypesEnum::TYPE_IMAGE) {
-                copy(App::getAlias("@uploads") . $out_dir . $out_file_name,
-                    App::getAlias("@uploads") . $out_dir . $out_original_file_name);
-                $this->origin_file_path = $out_dir . $out_original_file_name;
+                copy(App::getAlias("@uploads") . $outDir . $outFileName,
+                    App::getAlias("@uploads") . $outDir . $outOriginalFileName);
+                $this->origin_file_path = $outDir . $outOriginalFileName;
             } else {
                 $this->origin_file_path = $this->file_path;
             }

@@ -40,16 +40,16 @@ class Image extends File
         $uploadsDir = end($uploadsDirParts);
 
         try {
-            $file_info = pathinfo($this->file_path);
-            $new_file_name = $file_info['filename'] . '-' . $width . 'x' . $height . '.' . $file_info['extension'];
+            $fileInfo = pathinfo($useOrigin ? $this->origin_file_path : $this->file_path);
+            $newFileName = $fileInfo['filename'] . '-' . $width . 'x' . $height . '.' . $fileInfo['extension'];
 
-            if (!file_exists(App::getAlias('@uploads/' . $file_info['dirname'] . '/' . $new_file_name))) {
+            if (!file_exists(App::getAlias('@uploads/' . $fileInfo['dirname'] . '/' . $newFileName))) {
                 $imanee = new Imanee(
                     App::getAlias('@uploads' . ($useOrigin ? $this->origin_file_path : $this->file_path)),
                     new ImagickResource()
                 );
                 $imanee->thumbnail($width, $height, $crop)
-                    ->write(App::getAlias('@uploads/' . $file_info['dirname'] . '/' . $new_file_name));
+                    ->write(App::getAlias('@uploads/' . $fileInfo['dirname'] . '/' . $newFileName));
 
                 /** @var ResizedImage $resizedImage */
                 $resizedImage = App::createObject([
@@ -57,12 +57,12 @@ class Image extends File
                     'image_id' => $this->id,
                     'width' => $width,
                     'height' => $height,
-                    'file_path' => $file_info['dirname'] . '/' . $new_file_name
+                    'file_path' => $fileInfo['dirname'] . '/' . $newFileName
                 ]);
                 $resizedImage->save();
             }
 
-            return '/' . $uploadsDir . '/' . $file_info['dirname'] . '/' . $new_file_name;
+            return '/' . $uploadsDir . '/' . $fileInfo['dirname'] . '/' . $newFileName;
         } catch (ImageNotFoundException $e) {
             App::error($e->getMessage(), 'images');
 
